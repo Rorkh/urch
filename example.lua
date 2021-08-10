@@ -25,6 +25,9 @@ urch.KeyDown(urch.key[1])
 urch.KeyUp(urch.key[1])
 urch.KeyUp(urch.key.LSHIFT)
 
+local x, y = urch.GetCursorPos()
+print(x, y)
+
 urch.TrapKey(urch.key.Q, function()
 	print("Q key was pressed")
 end)

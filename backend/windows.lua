@@ -420,17 +420,21 @@ static const int MOUSEEVENTF_ABSOLUTE             = 0x8000;
 ]]
 
 ffi.cdef[[
-int
-__stdcall
-GetSystemMetrics(
-     int nIndex);
+int __stdcall GetSystemMetrics(int nIndex);
 
 static const int SM_CXSCREEN           =  0;
 static const int SM_CYSCREEN           =  1;
 ]]
 
 ffi.cdef[[
+struct POINT
+ 	{
+        long  x;
+        long  y;
+    };
+
 void Sleep(int ms);
+int __stdcall GetCursorPos(struct POINT* lpPoint);
 ]]
 
 ffi.cdef[[
@@ -480,6 +484,17 @@ function backend.KeyPress(key, delay)
 	backend.KeyUp(key)
 end
 
+function backend.IsKeyPressed(key)
+	return C.GetAsyncKeyState(key) ~= 0
+end
+
+function backend.TrapKey(key, callback)
+	while true do
+		if backend.IsKeyPressed(key) then callback() end
+		C.Sleep(50)
+	end
+end
+
 function backend.MouseDown(x, y, relative)
 	local input = ffi.new("INPUT")
 		input.type = INPUT_MOUSE
@@ -514,15 +529,11 @@ function backend.MouseMove(x, y, relative)
 	C.SendInput(1, input, sizeof(input))
 end
 
-function backend.IsKeyPressed(key)
-	return C.GetAsyncKeyState(key) ~= 0
-end
+function backend.GetCursorPos()
+	local point = ffi.new("struct POINT")
+	C.GetCursorPos(point)
 
-function backend.TrapKey(key, callback)
-	while true do
-		if backend.IsKeyPressed(key) then callback() end
-		C.Sleep(50)
-	end
+	return point.x, point.y
 end
 
 return backend

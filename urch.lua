@@ -12,11 +12,13 @@ urch.KeyDown = backend.KeyDown
 urch.KeyUp = backend.KeyUp
 urch.KeyPress = backend.KeyPress
 
+urch.IsKeyPressed = backend.IsKeyPressed
+urch.TrapKey = backend.TrapKey
+
 urch.MouseDown = backend.MouseDown
 urch.MouseUp = backend.MouseUp
 urch.MouseMove = backend.MouseMove
 
-urch.IsKeyPressed = backend.IsKeyPressed
-urch.TrapKey = backend.TrapKey
+urch.GetCursorPos = backend.GetCursorPos
 
 return urch
