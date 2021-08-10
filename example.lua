@@ -24,3 +24,7 @@ urch.KeyDown(urch.key.LSHIFT)
 urch.KeyDown(urch.key[1])
 urch.KeyUp(urch.key[1])
 urch.KeyUp(urch.key.LSHIFT)
+
+urch.TrapKey(urch.key.Q, function()
+	print("Q key was pressed")
+end)

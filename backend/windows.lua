@@ -433,6 +433,10 @@ ffi.cdef[[
 void Sleep(int ms);
 ]]
 
+ffi.cdef[[
+SHORT GetAsyncKeyState(int vKey);
+]]
+
 local backend = {}
 
 local sizeof = ffi.sizeof
@@ -508,6 +512,17 @@ function backend.MouseMove(x, y, relative)
 		input.mi.dwFlags = relative and EVENT_MOVE or bit.bor(EVENT_ABSOLUTE, EVENT_MOVE)
 	
 	C.SendInput(1, input, sizeof(input))
+end
+
+function backend.IsKeyPressed(key)
+	return C.GetAsyncKeyState(key) ~= 0
+end
+
+function backend.TrapKey(key, callback)
+	while true do
+		if backend.IsKeyPressed(key) then callback() end
+		C.Sleep(50)
+	end
 end
 
 return backend

@@ -16,4 +16,7 @@ urch.MouseDown = backend.MouseDown
 urch.MouseUp = backend.MouseUp
 urch.MouseMove = backend.MouseMove
 
+urch.IsKeyPressed = backend.IsKeyPressed
+urch.TrapKey = backend.TrapKey
+
 return urch
