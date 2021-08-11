@@ -1,7 +1,8 @@
 local urch = require("urch")
 
-urch.KeyDown(urch.key.LSHIFT)
-urch.KeyDown(urch.key.H)
+urch.MouseClick(0, 0)
+
+--[[urch.KeyDown(urch.key.H)
 urch.KeyUp(urch.key.H)
 urch.KeyUp(urch.key.LSHIFT)
 
@@ -30,4 +31,4 @@ print(x, y)
 
 urch.TrapKey(urch.key.Q, function()
 	print("Q key was pressed")
-end)
+end)--]]

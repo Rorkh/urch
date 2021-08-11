@@ -495,7 +495,16 @@ function backend.TrapKey(key, callback)
 	end
 end
 
-function backend.MouseDown(x, y, relative)
+function backend.GetCursorPos()
+	local point = ffi.new("struct POINT")
+	C.GetCursorPos(point)
+
+	return point.x, point.y
+end
+
+function backend.MouseDown(relative)
+	local x, y = backend.GetCursorPos()
+	
 	local input = ffi.new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.dx = x
@@ -506,7 +515,9 @@ function backend.MouseDown(x, y, relative)
 	C.SendInput(1, input, sizeof(input))
 end
 
-function backend.MouseUp(x, y, relative)
+function backend.MouseUp(relative)
+	local x, y = backend.GetCursorPos()
+	
 	local input = ffi.new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.dx = x
@@ -529,11 +540,11 @@ function backend.MouseMove(x, y, relative)
 	C.SendInput(1, input, sizeof(input))
 end
 
-function backend.GetCursorPos()
-	local point = ffi.new("struct POINT")
-	C.GetCursorPos(point)
-
-	return point.x, point.y
+-- TODO: Move out of backend
+function backend.MouseClick(x, y, relative)
+	backend.MouseMove(x, y, relative)
+	backend.MouseDown(relative)
+	backend.MouseUp(relative)
 end
 
 return backend
