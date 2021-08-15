@@ -157,7 +157,7 @@ function backend.GetCursorPos()
 	error("GetCursorPos is not implemented for Linux yet!")
 end
 
-function backend.MouseDown(relative)
+function backend.LeftMouseDown(relative)
 	local display = ptr(CX.XOpenDisplay(jit.NULL))
 	
 	CXT.XTestFakeButtonEvent(display, 1, true, 0)
@@ -165,10 +165,26 @@ function backend.MouseDown(relative)
 	CX.XFlush(display)
 end
 
-function backend.MouseUp(relative)
+function backend.LeftMouseUp(relative)
 	local display = ptr(CX.XOpenDisplay(jit.NULL))
 	
 	CXT.XTestFakeButtonEvent(display, 1, false, 0)
+	
+	CX.XFlush(display)
+end
+
+function backend.RightMouseDown(relative)
+	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	
+	CXT.XTestFakeButtonEvent(display, 3, true, 0)
+	
+	CX.XFlush(display)
+end
+
+function backend.RightMouseUp(relative)
+	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	
+	CXT.XTestFakeButtonEvent(display, 3, false, 0)
 	
 	CX.XFlush(display)
 end
@@ -183,10 +199,20 @@ function backend.MouseMove(x, y, relative)
 end
 
 -- TODO: Move out of backend
-function backend.MouseClick(x, y, relative)
+function backend.LeftMouseClick(x, y, relative)
 	backend.MouseMove(x, y, relative)
-	backend.MouseDown(relative)
-	backend.MouseUp(relative)
+	backend.LeftMouseDown(relative)
+	backend.LeftMouseUp(relative)
+end
+
+function backend.RightMouseClick(x, y, relative)
+	backend.MouseMove(x, y, relative)
+	backend.RightMouseDown(relative)
+	backend.RightMouseUp(relative)
+end
+
+function backend.MouseWheel(amount)
+	error("MouseWheel is not implemented for Linux yet!")
 end
 
 return backend

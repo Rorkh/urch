@@ -448,9 +448,12 @@ local sizeof = ffi.sizeof
 local INPUT_MOUSE = C.INPUT_MOUSE
 
 local EVENT_KEYUP = C.KEYEVENTF_KEYUP
+local EVENT_RIGHTDOWN = C.MOUSEEVENTF_RIGHTDOWN
+local EVENT_RIGHTUP = C.MOUSEEVENTF_RIGHTUP
 local EVENT_LEFTDOWN = C.MOUSEEVENTF_LEFTDOWN
 local EVENT_LEFTUP = C.MOUSEEVENTF_LEFTUP
 local EVENT_MOVE = C.MOUSEEVENTF_MOVE
+local EVENT_WHEEL = C.MOUSEEVENTF_WHEEL
 
 local EVENT_ABSOLUTE = C.MOUSEEVENTF_ABSOLUTE
 
@@ -502,7 +505,7 @@ function backend.GetCursorPos()
 	return point.x, point.y
 end
 
-function backend.MouseDown(relative)
+function backend.LeftMouseDown(relative)
 	local x, y = backend.GetCursorPos()
 	
 	local input = ffi.new("INPUT")
@@ -515,7 +518,7 @@ function backend.MouseDown(relative)
 	C.SendInput(1, input, sizeof(input))
 end
 
-function backend.MouseUp(relative)
+function backend.LeftMouseUp(relative)
 	local x, y = backend.GetCursorPos()
 	
 	local input = ffi.new("INPUT")
@@ -524,6 +527,32 @@ function backend.MouseUp(relative)
 		input.mi.dy = y
 		input.mi.mouseData = 0
 		input.mi.dwFlags = relative and EVENT_LEFTUP or bit.bor(EVENT_ABSOLUTE, EVENT_LEFTUP)
+	
+	C.SendInput(1, input, sizeof(input))
+end
+
+function backend.RightMouseDown(relative)
+	local x, y = backend.GetCursorPos()
+	
+	local input = ffi.new("INPUT")
+		input.type = INPUT_MOUSE
+		input.mi.dx = x
+		input.mi.dy = y
+		input.mi.mouseData = 0
+		input.mi.dwFlags = relative and EVENT_RIGHTDOWN or bit.bor(EVENT_ABSOLUTE, EVENT_RIGHTDOWN)
+	
+	C.SendInput(1, input, sizeof(input))
+end
+
+function backend.RightMouseUp(relative)
+	local x, y = backend.GetCursorPos()
+	
+	local input = ffi.new("INPUT")
+		input.type = INPUT_MOUSE
+		input.mi.dx = x
+		input.mi.dy = y
+		input.mi.mouseData = 0
+		input.mi.dwFlags = relative and EVENT_RIGHTUP or bit.bor(EVENT_ABSOLUTE, EVENT_RIGHTUP)
 	
 	C.SendInput(1, input, sizeof(input))
 end
@@ -541,10 +570,25 @@ function backend.MouseMove(x, y, relative)
 end
 
 -- TODO: Move out of backend
-function backend.MouseClick(x, y, relative)
+function backend.LeftMouseClick(x, y, relative)
+	backend.LeftMouseMove(x, y, relative)
+	backend.LeftMouseDown(relative)
+	backend.LeftMouseUp(relative)
+end
+
+function backend.RightMouseClick(x, y, relative)
 	backend.MouseMove(x, y, relative)
-	backend.MouseDown(relative)
-	backend.MouseUp(relative)
+	backend.RightMouseDown(relative)
+	backend.RightMouseUp(relative)
+end
+
+function backend.MouseWheel(amount)
+	local input = ffi.new("INPUT")
+		input.type = INPUT_MOUSE
+		input.mi.mouseData = amount or 0
+		input.mi.dwFlags = EVENT_WHEEL
+
+	C.SendInput(1, input, sizeof(input))
 end
 
 return backend

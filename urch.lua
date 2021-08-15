@@ -17,9 +17,20 @@ urch.TrapKey = backend.TrapKey
 
 urch.GetCursorPos = backend.GetCursorPos
 
-urch.MouseDown = backend.MouseDown
-urch.MouseUp = backend.MouseUp
 urch.MouseMove = backend.MouseMove
-urch.MouseClick = backend.MouseClick
+
+urch.RightMouseDown = backend.RightMouseDown
+urch.RightMouseUp = backend.RightMouseUp
+urch.RightMouseClick = backend.RightMouseClick
+
+urch.LeftMouseDown = backend.LeftMouseDown
+urch.LeftMouseUp = backend.LeftMouseUp
+urch.LeftMouseClick = backend.LeftMouseClick
+
+urch.MouseWheel = backend.MouseWheel
+
+urch.MouseDown = urch.LeftMouseDown
+urch.MouseUp = urch.LeftMouseUp
+urch.MouseClick = urch.LeftMouseClick
 
 return urch

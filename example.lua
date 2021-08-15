@@ -1,8 +1,7 @@
 local urch = require("urch")
 
-urch.MouseClick(0, 0)
-
---[[urch.KeyDown(urch.key.H)
+--[[urch.KeyDown(urch.key.LSHIFT)
+urch.KeyDown(urch.key.H)
 urch.KeyUp(urch.key.H)
 urch.KeyUp(urch.key.LSHIFT)
 
@@ -27,8 +26,8 @@ urch.KeyUp(urch.key[1])
 urch.KeyUp(urch.key.LSHIFT)
 
 local x, y = urch.GetCursorPos()
-print(x, y)
+print(x, y)--]]
 
 urch.TrapKey(urch.key.Q, function()
-	print("Q key was pressed")
-end)--]]
+	urch.MouseWheel(-100)
+end)
