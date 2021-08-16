@@ -189,20 +189,52 @@ function backend.RightMouseUp()
 	CX.XFlush(display)
 end
 
-function backend.X1MouseUp()
-	error("X1MouseUp is not implemented for Linux yet!")
-end
-
 function backend.X1MouseDown()
-	error("X1MouseDown is not implemented for Linux yet!")
+	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	
+	CXT.XTestFakeButtonEvent(display, 8, true, 0)
+	
+	CX.XFlush(display)
 end
 
-function backend.X2MouseUp()
-	error("X2MouseUp is not implemented for Linux yet!")
+function backend.X1MouseUp()
+	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	
+	CXT.XTestFakeButtonEvent(display, 8, false, 0)
+	
+	CX.XFlush(display)
 end
 
 function backend.X2MouseDown()
-	error("X2MouseDown is not implemented for Linux yet!")
+	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	
+	CXT.XTestFakeButtonEvent(display, 9, true, 0)
+	
+	CX.XFlush(display)
+end
+
+function backend.X2MouseUp()
+	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	
+	CXT.XTestFakeButtonEvent(display, 9, false, 0)
+	
+	CX.XFlush(display)
+end
+
+function backend.MiddleMouseDown()
+	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	
+	CXT.XTestFakeButtonEvent(display, 2, true, 0)
+	
+	CX.XFlush(display)
+end
+
+function backend.MiddleMouseUp()
+	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	
+	CXT.XTestFakeButtonEvent(display, 2, false, 0)
+	
+	CX.XFlush(display)
 end
 
 -- TOTHINK: XTestFakeRelativeMotionEvent doesn't work as intended
@@ -228,11 +260,18 @@ function backend.RightMouseClick(x, y, relative)
 end
 
 function backend.X1MouseClick()
-	error("X1MouseClick is not implemented for Linux yet!")
+	backend.X1MouseDown()
+	backend.X1MouseUp()
 end
 
 function backend.X2MouseClick()
-	error("X2MouseClick is not implemented for Linux yet!")
+	backend.X2MouseDown()
+	backend.X2MouseUp()
+end
+
+function backend.MiddleMouseClick()
+	backend.MiddleMouseDown()
+	backend.MiddleMouseUp()
 end
 
 function backend.MouseWheel(amount)

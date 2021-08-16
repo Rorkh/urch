@@ -457,6 +457,8 @@ local EVENT_LEFTDOWN = C.MOUSEEVENTF_LEFTDOWN
 local EVENT_LEFTUP = C.MOUSEEVENTF_LEFTUP
 local EVENT_XDOWN = C.MOUSEEVENTF_XDOWN
 local EVENT_XUP = C.MOUSEEVENTF_XUP
+local EVENT_MIDDLEDOWN = C.MOUSEEVENTF_MIDDLEDOWN
+local EVENT_MIDDLEUP = C.MOUSEEVENTF_MIDDLEUP
 local EVENT_MOVE = C.MOUSEEVENTF_MOVE
 local EVENT_WHEEL = C.MOUSEEVENTF_WHEEL
 
@@ -565,9 +567,7 @@ function backend.RightMouseUp()
 	C.SendInput(1, input, sizeof(input))
 end
 
-function backend.X1MouseDown()
-	local x, y = backend.GetCursorPos()
-	
+function backend.X1MouseDown()	
 	local input = ffi.new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.mouseData = XBUTTON1
@@ -576,9 +576,7 @@ function backend.X1MouseDown()
 	C.SendInput(1, input, sizeof(input))
 end
 
-function backend.X1MouseUp()
-	local x, y = backend.GetCursorPos()
-	
+function backend.X1MouseUp()	
 	local input = ffi.new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.mouseData = XBUTTON1
@@ -587,9 +585,7 @@ function backend.X1MouseUp()
 	C.SendInput(1, input, sizeof(input))
 end
 
-function backend.X2MouseDown(relative)
-	local x, y = backend.GetCursorPos()
-	
+function backend.X2MouseDown(relative)	
 	local input = ffi.new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.mouseData = XBUTTON2
@@ -598,19 +594,35 @@ function backend.X2MouseDown(relative)
 	C.SendInput(1, input, sizeof(input))
 end
 
-function backend.X2MouseUp()
-	local x, y = backend.GetCursorPos()
-	
+function backend.X2MouseUp()	
 	local input = ffi.new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.mouseData = XBUTTON2
 		input.mi.dwFlags = EVENT_XUP
+	
+	C.SendInput(1, input, sizeof(input))
+end
+
+function backend.MiddleMouseDown(relative)	
+	local input = ffi.new("INPUT")
+		input.type = INPUT_MOUSE
+		input.mi.dwFlags = EVENT_MIDDLEDOWN
+	
+	C.SendInput(1, input, sizeof(input))
+end
+
+function backend.MiddleMouseUp()	
+	local input = ffi.new("INPUT")
+		input.type = INPUT_MOUSE
+		input.mi.dwFlags = EVENT_MIDDLEUP
 	
 	C.SendInput(1, input, sizeof(input))
 end
 
 -- TODO: Fix wrong absolute move
 function backend.MouseMove(x, y, relative)
+	if not x then x, y = backend.GetCursorPos() end
+
 	local input = ffi.new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.dx = x
@@ -642,6 +654,11 @@ end
 function backend.X2MouseClick()
 	backend.X2MouseDown()
 	backend.X2MouseUp()
+end
+
+function backend.MiddleMouseClick()
+	backend.MiddleMouseDown()
+	backend.MiddleMouseUp()
 end
 
 function backend.MouseWheel(amount)

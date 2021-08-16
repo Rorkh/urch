@@ -35,6 +35,10 @@ urch.X2MouseDown = backend.X2MouseDown
 urch.X2MouseUp = backend.X2MouseUp
 urch.X2MouseClick = backend.X2MouseClick
 
+urch.MiddleMouseDown = backend.MiddleMouseDown
+urch.MiddleMouseUp = backend.MiddleMouseUp
+urch.MiddleMouseClick = backend.MiddleMouseClick
+
 urch.MouseWheel = backend.MouseWheel
 
 urch.MouseDown = urch.LeftMouseDown
