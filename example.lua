@@ -29,5 +29,5 @@ local x, y = urch.GetCursorPos()
 print(x, y)--]]
 
 urch.TrapKey(urch.key.Q, function()
-	urch.MouseWheel(-100)
+	urch.X1MouseClick()
 end)

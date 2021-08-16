@@ -417,6 +417,9 @@ static const int MOUSEEVENTF_MOVE_NOCOALESCE      = 0x2000;
 
 static const int MOUSEEVENTF_VIRTUALDESK          = 0x4000;
 static const int MOUSEEVENTF_ABSOLUTE             = 0x8000;
+
+static const int XBUTTON1 = 0x0001;
+static const int XBUTTON2 = 0x0002;
 ]]
 
 ffi.cdef[[
@@ -452,8 +455,13 @@ local EVENT_RIGHTDOWN = C.MOUSEEVENTF_RIGHTDOWN
 local EVENT_RIGHTUP = C.MOUSEEVENTF_RIGHTUP
 local EVENT_LEFTDOWN = C.MOUSEEVENTF_LEFTDOWN
 local EVENT_LEFTUP = C.MOUSEEVENTF_LEFTUP
+local EVENT_XDOWN = C.MOUSEEVENTF_XDOWN
+local EVENT_XUP = C.MOUSEEVENTF_XUP
 local EVENT_MOVE = C.MOUSEEVENTF_MOVE
 local EVENT_WHEEL = C.MOUSEEVENTF_WHEEL
+
+local XBUTTON1 = C.XBUTTON1
+local XBUTTON2 = C.XBUTTON2
 
 local EVENT_ABSOLUTE = C.MOUSEEVENTF_ABSOLUTE
 
@@ -505,7 +513,7 @@ function backend.GetCursorPos()
 	return point.x, point.y
 end
 
-function backend.LeftMouseDown(relative)
+function backend.LeftMouseDown()
 	local x, y = backend.GetCursorPos()
 	
 	local input = ffi.new("INPUT")
@@ -513,12 +521,12 @@ function backend.LeftMouseDown(relative)
 		input.mi.dx = x
 		input.mi.dy = y
 		input.mi.mouseData = 0
-		input.mi.dwFlags = relative and EVENT_LEFTDOWN or bit.bor(EVENT_ABSOLUTE, EVENT_LEFTDOWN)
+		input.mi.dwFlags = bit.bor(EVENT_ABSOLUTE, EVENT_LEFTDOWN)
 	
 	C.SendInput(1, input, sizeof(input))
 end
 
-function backend.LeftMouseUp(relative)
+function backend.LeftMouseUp()
 	local x, y = backend.GetCursorPos()
 	
 	local input = ffi.new("INPUT")
@@ -526,12 +534,12 @@ function backend.LeftMouseUp(relative)
 		input.mi.dx = x
 		input.mi.dy = y
 		input.mi.mouseData = 0
-		input.mi.dwFlags = relative and EVENT_LEFTUP or bit.bor(EVENT_ABSOLUTE, EVENT_LEFTUP)
+		input.mi.dwFlags = bit.bor(EVENT_ABSOLUTE, EVENT_LEFTUP)
 	
 	C.SendInput(1, input, sizeof(input))
 end
 
-function backend.RightMouseDown(relative)
+function backend.RightMouseDown()
 	local x, y = backend.GetCursorPos()
 	
 	local input = ffi.new("INPUT")
@@ -539,12 +547,12 @@ function backend.RightMouseDown(relative)
 		input.mi.dx = x
 		input.mi.dy = y
 		input.mi.mouseData = 0
-		input.mi.dwFlags = relative and EVENT_RIGHTDOWN or bit.bor(EVENT_ABSOLUTE, EVENT_RIGHTDOWN)
+		input.mi.dwFlags = bit.bor(EVENT_ABSOLUTE, EVENT_RIGHTDOWN)
 	
 	C.SendInput(1, input, sizeof(input))
 end
 
-function backend.RightMouseUp(relative)
+function backend.RightMouseUp()
 	local x, y = backend.GetCursorPos()
 	
 	local input = ffi.new("INPUT")
@@ -552,7 +560,51 @@ function backend.RightMouseUp(relative)
 		input.mi.dx = x
 		input.mi.dy = y
 		input.mi.mouseData = 0
-		input.mi.dwFlags = relative and EVENT_RIGHTUP or bit.bor(EVENT_ABSOLUTE, EVENT_RIGHTUP)
+		input.mi.dwFlags = bit.bor(EVENT_ABSOLUTE, EVENT_RIGHTUP)
+	
+	C.SendInput(1, input, sizeof(input))
+end
+
+function backend.X1MouseDown()
+	local x, y = backend.GetCursorPos()
+	
+	local input = ffi.new("INPUT")
+		input.type = INPUT_MOUSE
+		input.mi.mouseData = XBUTTON1
+		input.mi.dwFlags = EVENT_XDOWN
+	
+	C.SendInput(1, input, sizeof(input))
+end
+
+function backend.X1MouseUp()
+	local x, y = backend.GetCursorPos()
+	
+	local input = ffi.new("INPUT")
+		input.type = INPUT_MOUSE
+		input.mi.mouseData = XBUTTON1
+		input.mi.dwFlags = EVENT_XUP
+	
+	C.SendInput(1, input, sizeof(input))
+end
+
+function backend.X2MouseDown(relative)
+	local x, y = backend.GetCursorPos()
+	
+	local input = ffi.new("INPUT")
+		input.type = INPUT_MOUSE
+		input.mi.mouseData = XBUTTON2
+		input.mi.dwFlags = EVENT_XDOWN
+	
+	C.SendInput(1, input, sizeof(input))
+end
+
+function backend.X2MouseUp()
+	local x, y = backend.GetCursorPos()
+	
+	local input = ffi.new("INPUT")
+		input.type = INPUT_MOUSE
+		input.mi.mouseData = XBUTTON2
+		input.mi.dwFlags = EVENT_XUP
 	
 	C.SendInput(1, input, sizeof(input))
 end
@@ -580,6 +632,16 @@ function backend.RightMouseClick(x, y, relative)
 	backend.MouseMove(x, y, relative)
 	backend.RightMouseDown(relative)
 	backend.RightMouseUp(relative)
+end
+
+function backend.X1MouseClick()
+	backend.X1MouseDown()
+	backend.X1MouseUp()
+end
+
+function backend.X2MouseClick()
+	backend.X2MouseDown()
+	backend.X2MouseUp()
 end
 
 function backend.MouseWheel(amount)

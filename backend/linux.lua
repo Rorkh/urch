@@ -157,7 +157,7 @@ function backend.GetCursorPos()
 	error("GetCursorPos is not implemented for Linux yet!")
 end
 
-function backend.LeftMouseDown(relative)
+function backend.LeftMouseDown()
 	local display = ptr(CX.XOpenDisplay(jit.NULL))
 	
 	CXT.XTestFakeButtonEvent(display, 1, true, 0)
@@ -165,7 +165,7 @@ function backend.LeftMouseDown(relative)
 	CX.XFlush(display)
 end
 
-function backend.LeftMouseUp(relative)
+function backend.LeftMouseUp()
 	local display = ptr(CX.XOpenDisplay(jit.NULL))
 	
 	CXT.XTestFakeButtonEvent(display, 1, false, 0)
@@ -173,7 +173,7 @@ function backend.LeftMouseUp(relative)
 	CX.XFlush(display)
 end
 
-function backend.RightMouseDown(relative)
+function backend.RightMouseDown()
 	local display = ptr(CX.XOpenDisplay(jit.NULL))
 	
 	CXT.XTestFakeButtonEvent(display, 3, true, 0)
@@ -181,12 +181,28 @@ function backend.RightMouseDown(relative)
 	CX.XFlush(display)
 end
 
-function backend.RightMouseUp(relative)
+function backend.RightMouseUp()
 	local display = ptr(CX.XOpenDisplay(jit.NULL))
 	
 	CXT.XTestFakeButtonEvent(display, 3, false, 0)
 	
 	CX.XFlush(display)
+end
+
+function backend.X1MouseUp()
+	error("X1MouseUp is not implemented for Linux yet!")
+end
+
+function backend.X1MouseDown()
+	error("X1MouseDown is not implemented for Linux yet!")
+end
+
+function backend.X2MouseUp()
+	error("X2MouseUp is not implemented for Linux yet!")
+end
+
+function backend.X2MouseDown()
+	error("X2MouseDown is not implemented for Linux yet!")
 end
 
 -- TOTHINK: XTestFakeRelativeMotionEvent doesn't work as intended
@@ -201,14 +217,22 @@ end
 -- TODO: Move out of backend
 function backend.LeftMouseClick(x, y, relative)
 	backend.MouseMove(x, y, relative)
-	backend.LeftMouseDown(relative)
-	backend.LeftMouseUp(relative)
+	backend.LeftMouseDown()
+	backend.LeftMouseUp()
 end
 
 function backend.RightMouseClick(x, y, relative)
 	backend.MouseMove(x, y, relative)
-	backend.RightMouseDown(relative)
-	backend.RightMouseUp(relative)
+	backend.RightMouseDown()
+	backend.RightMouseUp()
+end
+
+function backend.X1MouseClick()
+	error("X1MouseClick is not implemented for Linux yet!")
+end
+
+function backend.X2MouseClick()
+	error("X2MouseClick is not implemented for Linux yet!")
 end
 
 function backend.MouseWheel(amount)

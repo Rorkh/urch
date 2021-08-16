@@ -27,6 +27,14 @@ urch.LeftMouseDown = backend.LeftMouseDown
 urch.LeftMouseUp = backend.LeftMouseUp
 urch.LeftMouseClick = backend.LeftMouseClick
 
+urch.X1MouseDown = backend.X1MouseDown
+urch.X1MouseUp = backend.X1MouseUp
+urch.X1MouseClick = backend.X1MouseClick
+
+urch.X2MouseDown = backend.X2MouseDown
+urch.X2MouseUp = backend.X2MouseUp
+urch.X2MouseClick = backend.X2MouseClick
+
 urch.MouseWheel = backend.MouseWheel
 
 urch.MouseDown = urch.LeftMouseDown
