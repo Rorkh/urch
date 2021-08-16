@@ -508,6 +508,13 @@ function backend.TrapKey(key, callback)
 	end
 end
 
+function backend.TrapMouse(keycode, callback)
+	while true do
+		if backend.IsKeyPressed(keycode) then callback() end
+		C.Sleep(150)
+	end
+end
+
 function backend.GetCursorPos()
 	local point = ffi.new("struct POINT")
 	C.GetCursorPos(point)
