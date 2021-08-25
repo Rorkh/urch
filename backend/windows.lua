@@ -642,7 +642,7 @@ end
 
 -- TODO: Move out of backend
 function backend.LeftMouseClick(x, y, relative)
-	backend.LeftMouseMove(x, y, relative)
+	backend.MouseMove(x, y, relative)
 	backend.LeftMouseDown(relative)
 	backend.LeftMouseUp(relative)
 end
