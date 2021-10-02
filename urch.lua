@@ -18,6 +18,7 @@ urch.KeyPress = backend.KeyPress
 urch.IsKeyPressed = backend.IsKeyPressed
 
 urch.TrapKey = backend.TrapKey
+urch.TrapKeys = backend.TrapKeys
 urch.TrapMouse = backend.TrapMouse
 
 urch.GetCursorPos = backend.GetCursorPos

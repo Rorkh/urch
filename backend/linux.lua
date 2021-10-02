@@ -153,6 +153,10 @@ function backend.TrapKey(key, callback)
 	error("TrapKey is not implemented for Linux yet!")
 end
 
+function backend.TrapKeys(key, callback)
+	error("TrapKeys is not implemented for Linux yet!")
+end
+
 function backend.TrapMouse(keycode, callback)
 	error("TrapMouse is not implemented for Linux yet!")
 end

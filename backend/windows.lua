@@ -508,6 +508,13 @@ function backend.TrapKey(key, callback)
 	end
 end
 
+function backend.TrapKeys(keys, callback)
+	while true do
+		for _, key in ipairs(keys) do if backend.IsKeyPressed(key) then callback(key) end end
+		C.Sleep(50)
+	end
+end
+
 function backend.TrapMouse(keycode, callback)
 	while true do
 		if backend.IsKeyPressed(keycode) then callback() end
