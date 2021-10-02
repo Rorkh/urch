@@ -393,6 +393,7 @@ ffi.cdef[[
 static const int INPUT_MOUSE			=0;
 static const int INPUT_KEYBOARD			=1;
 
+static const int KEYEVENTF_KEYDOWN     =0x0000;
 static const int KEYEVENTF_EXTENDEDKEY =0x0001;
 static const int KEYEVENTF_KEYUP       =0x0002;
 static const int KEYEVENTF_UNICODE     =0x0004;
@@ -451,6 +452,8 @@ local sizeof = ffi.sizeof
 local INPUT_MOUSE = C.INPUT_MOUSE
 
 local EVENT_KEYUP = C.KEYEVENTF_KEYUP
+local EVENT_KEYDOWN = C.KEYEVENTF_KEYDOWN
+local EVENT_SCANCODE = C.KEYEVENTF_SCANCODE
 local EVENT_RIGHTDOWN = C.MOUSEEVENTF_RIGHTDOWN
 local EVENT_RIGHTUP = C.MOUSEEVENTF_RIGHTUP
 local EVENT_LEFTDOWN = C.MOUSEEVENTF_LEFTDOWN
@@ -473,8 +476,9 @@ backend.ScreenHeight = C.GetSystemMetrics(C.SM_CYSCREEN)
 function backend.KeyDown(key)
 	local input = ffi.new("INPUT")
 		input.type = 1
-		input.ki.wVk = key
-		input.ki.wScan = 0
+		input.ki.wVk = 0
+		input.ki.wScan = C.MapVirtualKeyW(key, 0)
+		input.ki.dwFlags = bit.bor(EVENT_KEYDOWN, EVENT_SCANCODE)
 
 	C.SendInput(1, input, sizeof(input))
 end
@@ -482,9 +486,9 @@ end
 function backend.KeyUp(key)
 	local input = ffi.new("INPUT")
 		input.type = 1
-		input.ki.wVk = key
-		input.ki.wScan = 0
-		input.ki.dwFlags = EVENT_KEYUP
+		input.ki.wVk = 0
+		input.ki.wScan = C.MapVirtualKeyW(key, 0)
+		input.ki.dwFlags = bit.bor(EVENT_KEYUP, EVENT_SCANCODE)
 
 	C.SendInput(1, input, sizeof(input))
 end
