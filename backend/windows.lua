@@ -448,6 +448,11 @@ SHORT GetAsyncKeyState(int vKey);
 local backend = {}
 
 local sizeof = ffi.sizeof
+local ffi_new = ffi.new
+
+local SendInput = C.SendInput
+local MapVirtualKeyW = C.MapVirtualKeyW
+local GetSystemMetrics = C.GetSystemMetrics
 
 local INPUT_MOUSE = C.INPUT_MOUSE
 
@@ -470,27 +475,27 @@ local XBUTTON2 = C.XBUTTON2
 
 local EVENT_ABSOLUTE = C.MOUSEEVENTF_ABSOLUTE
 
-backend.ScreenWidth = C.GetSystemMetrics(C.SM_CXSCREEN)
-backend.ScreenHeight = C.GetSystemMetrics(C.SM_CYSCREEN)
+backend.ScreenWidth = GetSystemMetrics(C.SM_CXSCREEN)
+backend.ScreenHeight = GetSystemMetrics(C.SM_CYSCREEN)
 
 function backend.KeyDown(key)
-	local input = ffi.new("INPUT")
+	local input = ffi_new("INPUT")
 		input.type = 1
 		input.ki.wVk = 0
-		input.ki.wScan = C.MapVirtualKeyW(key, 0)
+		input.ki.wScan = MapVirtualKeyW(key, 0)
 		input.ki.dwFlags = bit.bor(EVENT_KEYDOWN, EVENT_SCANCODE)
 
-	C.SendInput(1, input, sizeof(input))
+	SendInput(1, input, sizeof(input))
 end
 
 function backend.KeyUp(key)
-	local input = ffi.new("INPUT")
+	local input = ffi_new("INPUT")
 		input.type = 1
 		input.ki.wVk = 0
-		input.ki.wScan = C.MapVirtualKeyW(key, 0)
+		input.ki.wScan = MapVirtualKeyW(key, 0)
 		input.ki.dwFlags = bit.bor(EVENT_KEYUP, EVENT_SCANCODE)
 
-	C.SendInput(1, input, sizeof(input))
+	SendInput(1, input, sizeof(input))
 end
 
 function backend.KeyPress(key, delay)
@@ -527,7 +532,7 @@ function backend.TrapMouse(keycode, callback)
 end
 
 function backend.GetCursorPos()
-	local point = ffi.new("struct POINT")
+	local point = ffi_new("struct POINT")
 	C.GetCursorPos(point)
 
 	return point.x, point.y
@@ -536,119 +541,119 @@ end
 function backend.LeftMouseDown()
 	local x, y = backend.GetCursorPos()
 	
-	local input = ffi.new("INPUT")
+	local input = ffi_new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.dx = x
 		input.mi.dy = y
 		input.mi.mouseData = 0
 		input.mi.dwFlags = bit.bor(EVENT_ABSOLUTE, EVENT_LEFTDOWN)
 	
-	C.SendInput(1, input, sizeof(input))
+	SendInput(1, input, sizeof(input))
 end
 
 function backend.LeftMouseUp()
 	local x, y = backend.GetCursorPos()
 	
-	local input = ffi.new("INPUT")
+	local input = ffi_new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.dx = x
 		input.mi.dy = y
 		input.mi.mouseData = 0
 		input.mi.dwFlags = bit.bor(EVENT_ABSOLUTE, EVENT_LEFTUP)
 	
-	C.SendInput(1, input, sizeof(input))
+	SendInput(1, input, sizeof(input))
 end
 
 function backend.RightMouseDown()
 	local x, y = backend.GetCursorPos()
 	
-	local input = ffi.new("INPUT")
+	local input = ffi_new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.dx = x
 		input.mi.dy = y
 		input.mi.mouseData = 0
 		input.mi.dwFlags = bit.bor(EVENT_ABSOLUTE, EVENT_RIGHTDOWN)
 	
-	C.SendInput(1, input, sizeof(input))
+	SendInput(1, input, sizeof(input))
 end
 
 function backend.RightMouseUp()
 	local x, y = backend.GetCursorPos()
 	
-	local input = ffi.new("INPUT")
+	local input = ffi_new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.dx = x
 		input.mi.dy = y
 		input.mi.mouseData = 0
 		input.mi.dwFlags = bit.bor(EVENT_ABSOLUTE, EVENT_RIGHTUP)
 	
-	C.SendInput(1, input, sizeof(input))
+	SendInput(1, input, sizeof(input))
 end
 
 function backend.X1MouseDown()	
-	local input = ffi.new("INPUT")
+	local input = ffi_new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.mouseData = XBUTTON1
 		input.mi.dwFlags = EVENT_XDOWN
 	
-	C.SendInput(1, input, sizeof(input))
+	SendInput(1, input, sizeof(input))
 end
 
 function backend.X1MouseUp()	
-	local input = ffi.new("INPUT")
+	local input = ffi_new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.mouseData = XBUTTON1
 		input.mi.dwFlags = EVENT_XUP
 	
-	C.SendInput(1, input, sizeof(input))
+	SendInput(1, input, sizeof(input))
 end
 
 function backend.X2MouseDown(relative)	
-	local input = ffi.new("INPUT")
+	local input = ffi_new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.mouseData = XBUTTON2
 		input.mi.dwFlags = EVENT_XDOWN
 	
-	C.SendInput(1, input, sizeof(input))
+	SendInput(1, input, sizeof(input))
 end
 
 function backend.X2MouseUp()	
-	local input = ffi.new("INPUT")
+	local input = ffi_new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.mouseData = XBUTTON2
 		input.mi.dwFlags = EVENT_XUP
 	
-	C.SendInput(1, input, sizeof(input))
+	SendInput(1, input, sizeof(input))
 end
 
 function backend.MiddleMouseDown(relative)	
-	local input = ffi.new("INPUT")
+	local input = ffi_new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.dwFlags = EVENT_MIDDLEDOWN
 	
-	C.SendInput(1, input, sizeof(input))
+	SendInput(1, input, sizeof(input))
 end
 
 function backend.MiddleMouseUp()	
-	local input = ffi.new("INPUT")
+	local input = ffi_new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.dwFlags = EVENT_MIDDLEUP
 	
-	C.SendInput(1, input, sizeof(input))
+	SendInput(1, input, sizeof(input))
 end
 
 -- TODO: Fix wrong absolute move
 function backend.MouseMove(x, y, relative)
 	if not x then x, y = backend.GetCursorPos() end
 
-	local input = ffi.new("INPUT")
+	local input = ffi_new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.dx = x
 		input.mi.dy = y
 		input.mi.mouseData = 0
 		input.mi.dwFlags = relative and EVENT_MOVE or bit.bor(EVENT_ABSOLUTE, EVENT_MOVE)
 	
-	C.SendInput(1, input, sizeof(input))
+	SendInput(1, input, sizeof(input))
 end
 
 -- TODO: Move out of backend
@@ -680,12 +685,12 @@ function backend.MiddleMouseClick()
 end
 
 function backend.MouseWheel(amount)
-	local input = ffi.new("INPUT")
+	local input = ffi_new("INPUT")
 		input.type = INPUT_MOUSE
 		input.mi.mouseData = amount or 0
 		input.mi.dwFlags = EVENT_WHEEL
 
-	C.SendInput(1, input, sizeof(input))
+	SendInput(1, input, sizeof(input))
 end
 
 return backend
