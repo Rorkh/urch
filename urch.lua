@@ -51,4 +51,6 @@ urch.MouseDown = urch.LeftMouseDown
 urch.MouseUp = urch.LeftMouseUp
 urch.MouseClick = urch.LeftMouseClick
 
+urch.Sleep = backend.Sleep
+
 return urch

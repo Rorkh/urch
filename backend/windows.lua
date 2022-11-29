@@ -693,4 +693,8 @@ function backend.MouseWheel(amount)
 	SendInput(1, input, sizeof(input))
 end
 
+function backend.Sleep(time)
+	C.Sleep(time)
+end
+
 return backend

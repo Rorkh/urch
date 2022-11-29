@@ -286,4 +286,8 @@ function backend.MouseWheel(amount)
 	error("MouseWheel is not implemented for Linux yet!")
 end
 
+function backend.Sleep(time)
+	C.Sleep(time)
+end
+
 return backend
