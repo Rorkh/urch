@@ -7,6 +7,7 @@ local CX = ffi.load("X11.so.6")
 local CXT = ffi.load("libXtst.so")
 
 local C = ffi.C
+local NULL = jit.NULL
 
 ffi.cdef[[
 void free(void *ptr);
@@ -100,8 +101,6 @@ int XGetInputFocus(
 
 local backend = {}
 
-local sizeof = ffi.sizeof
-
 local function ptr(p)
 	return ffi.gc(p, ffi.C.free)
 end
@@ -117,7 +116,7 @@ screen = nil
 
 -- TODO: Do something with strange XTestFakeKeyEvent behavior
 function backend.KeyDown(key)
-	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	local display = ptr(CX.XOpenDisplay(NULL))
 	local keycode = CX.XKeysymToKeycode(display, key)
 	
 	CXT.XTestFakeKeyEvent(display, keycode, true, 0)
@@ -125,7 +124,7 @@ function backend.KeyDown(key)
 end
 
 function backend.KeyUp(key)
-	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	local display = ptr(CX.XOpenDisplay(NULL))
 	local keycode = CX.XKeysymToKeycode(display, key)
 	
 	CXT.XTestFakeKeyEvent(display, keycode, false, 0)
@@ -136,7 +135,7 @@ end
 function backend.KeyPress(key, delay)
 	delay = delay or 50
 	
-	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	local display = ptr(CX.XOpenDisplay(NULL))
 	local keycode = CX.XKeysymToKeycode(display, key)
 	
 	CXT.XTestFakeKeyEvent(display, keycode, false, 0)
@@ -166,7 +165,7 @@ function backend.GetCursorPos()
 end
 
 function backend.LeftMouseDown()
-	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	local display = ptr(CX.XOpenDisplay(NULL))
 	
 	CXT.XTestFakeButtonEvent(display, 1, true, 0)
 	
@@ -174,7 +173,7 @@ function backend.LeftMouseDown()
 end
 
 function backend.LeftMouseUp()
-	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	local display = ptr(CX.XOpenDisplay(NULL))
 	
 	CXT.XTestFakeButtonEvent(display, 1, false, 0)
 	
@@ -182,7 +181,7 @@ function backend.LeftMouseUp()
 end
 
 function backend.RightMouseDown()
-	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	local display = ptr(CX.XOpenDisplay(NULL))
 	
 	CXT.XTestFakeButtonEvent(display, 3, true, 0)
 	
@@ -190,7 +189,7 @@ function backend.RightMouseDown()
 end
 
 function backend.RightMouseUp()
-	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	local display = ptr(CX.XOpenDisplay(NULL))
 	
 	CXT.XTestFakeButtonEvent(display, 3, false, 0)
 	
@@ -198,7 +197,7 @@ function backend.RightMouseUp()
 end
 
 function backend.X1MouseDown()
-	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	local display = ptr(CX.XOpenDisplay(NULL))
 	
 	CXT.XTestFakeButtonEvent(display, 8, true, 0)
 	
@@ -206,7 +205,7 @@ function backend.X1MouseDown()
 end
 
 function backend.X1MouseUp()
-	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	local display = ptr(CX.XOpenDisplay(NULL))
 	
 	CXT.XTestFakeButtonEvent(display, 8, false, 0)
 	
@@ -214,7 +213,7 @@ function backend.X1MouseUp()
 end
 
 function backend.X2MouseDown()
-	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	local display = ptr(CX.XOpenDisplay(NULL))
 	
 	CXT.XTestFakeButtonEvent(display, 9, true, 0)
 	
@@ -222,7 +221,7 @@ function backend.X2MouseDown()
 end
 
 function backend.X2MouseUp()
-	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	local display = ptr(CX.XOpenDisplay(NULL))
 	
 	CXT.XTestFakeButtonEvent(display, 9, false, 0)
 	
@@ -230,7 +229,7 @@ function backend.X2MouseUp()
 end
 
 function backend.MiddleMouseDown()
-	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	local display = ptr(CX.XOpenDisplay(NULL))
 	
 	CXT.XTestFakeButtonEvent(display, 2, true, 0)
 	
@@ -238,7 +237,7 @@ function backend.MiddleMouseDown()
 end
 
 function backend.MiddleMouseUp()
-	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	local display = ptr(CX.XOpenDisplay(NULL))
 	
 	CXT.XTestFakeButtonEvent(display, 2, false, 0)
 	
@@ -247,7 +246,7 @@ end
 
 -- TOTHINK: XTestFakeRelativeMotionEvent doesn't work as intended
 function backend.MouseMove(x, y, relative)
-	local display = ptr(CX.XOpenDisplay(jit.NULL))
+	local display = ptr(CX.XOpenDisplay(NULL))
 	
 	CXT.XTestFakeMotionEvent(display, 0, x, y, 0)
 	
